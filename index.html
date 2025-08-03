@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Gold Digger Social Experiment</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏆</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: #0d0d0d;
+            color: #e8e8e8;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+            cursor: none;
+        }
+
+        .fog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, transparent 20%, rgba(13, 13, 13, 0.3) 70%);
+            z-index: 1;
+            animation: fog-drift 20s ease-in-out infinite;
+        }
+
+        @keyframes fog-drift {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.3; }
+            50% { transform: scale(1.1) rotate(2deg); opacity: 0.6; }
+        }
+
+        .ca-label {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 2px;
+            font-weight: 300;
+            z-index: 20;
+            opacity: 0;
+            animation: text-appear 1s ease-out 1.5s forwards;
+            padding: 8px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(25, 25, 25, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .content-box {
+            max-width: 600px;
+            padding: 4rem 2rem;
+            background: rgba(25, 25, 25, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            animation: fade-in 1s ease-out;
+        }
+
+        @keyframes fade-in {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.02), transparent);
+            animation: subtle-shimmer 8s ease-in-out infinite;
+        }
+
+        @keyframes subtle-shimmer {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 200;
+            color: #ffffff;
+            margin-bottom: 3rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: text-appear 1s ease-out 0.3s forwards;
+        }
+
+        @keyframes text-appear {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .divider {
+            width: 60px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 2rem auto;
+            position: relative;
+            opacity: 0;
+            animation: line-draw 0.8s ease-out 0.6s forwards;
+        }
+
+        @keyframes line-draw {
+            0% { width: 0; opacity: 0; }
+            100% { width: 60px; opacity: 1; }
+        }
+
+        .message {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #cccccc;
+            font-weight: 300;
+            letter-spacing: 1px;
+            opacity: 0;
+            animation: text-appear 1s ease-out 1s forwards;
+        }
+
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 100;
+            backdrop-filter: blur(2px);
+            will-change: transform;
+        }
+
+        .cursor::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .ambient-light {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.02) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            animation: ambient-pulse 12s ease-in-out infinite;
+        }
+
+        @keyframes ambient-pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.02; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.05; }
+        }
+
+        .floating-dust {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        .dust-particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: dust-float 25s linear infinite;
+        }
+
+        @keyframes dust-float {
+            0% {
+                transform: translateY(100vh) translateX(0px);
+                opacity: 0;
+            }
+            10%, 90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        .vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.8) 100%);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+                letter-spacing: 2px;
+            }
+            
+            .content-box {
+                padding: 3rem 1.5rem;
+                margin: 1rem;
+            }
+            
+            .message {
+                font-size: 1rem;
+            }
+        }
+
+        .breath {
+            animation: breathing 6s ease-in-out infinite;
+        }
+
+        @keyframes breathing {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+    </style>
+</head>
+<body>
+    <div class="fog"></div>
+    <div class="ambient-light"></div>
+    <div class="floating-dust" id="dust"></div>
+    <div class="vignette"></div>
+    <div class="cursor" id="cursor"></div>
+
+    <div class="ca-label">CA:</div>
+
+    <div class="container">
+        <div class="content-box breath">
+            <h1>The Gold Digger Social Experiment</h1>
+            <div class="divider"></div>
+            <div class="message">
+                This website is pointless. It has no narrative, no tek, no utility. It simply just looks good.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Custom cursor with smooth movement
+        const cursor = document.getElementById('cursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.1;
+            cursorY += (mouseY - cursorY) * 0.1;
+            
+            cursor.style.transform = `translate(${cursorX - 10}px, ${cursorY - 10}px)`;
+            requestAnimationFrame(animateCursor);
+        }
+
+        animateCursor();
+
+        // Create floating dust particles
+        function createDustParticle() {
+            const dustContainer = document.getElementById('dust');
+            const particle = document.createElement('div');
+            particle.className = 'dust-particle';
+            
+            particle.style.left = Math.random() * window.innerWidth + 'px';
+            particle.style.animationDuration = (Math.random() * 15 + 20) + 's';
+            particle.style.animationDelay = Math.random() * 5 + 's';
+            
+            dustContainer.appendChild(particle);
+
+            setTimeout(() => {
+                if (particle.parentNode) {
+                    particle.parentNode.removeChild(particle);
+                }
+            }, 30000);
+        }
+
+        // Create dust particles periodically
+        setInterval(createDustParticle, 2000);
+        
+        // Initial dust particles
+        for (let i = 0; i < 15; i++) {
+            setTimeout(createDustParticle, i * 500);
+        }
+
+        // Subtle mouse interaction
+        document.addEventListener('mousemove', (e) => {
+            const contentBox = document.querySelector('.content-box');
+            const rect = contentBox.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            const deltaX = (e.clientX - centerX) * 0.01;
+            const deltaY = (e.clientY - centerY) * 0.01;
+            
+            contentBox.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+        });
+
+        // Ambient sound simulation (visual feedback)
+        let ambientTimer;
+        document.addEventListener('mouseenter', () => {
+            document.body.style.filter = 'brightness(1.05)';
+        });
+
+        document.addEventListener('mouseleave', () => {
+            document.body.style.filter = 'brightness(1)';
+        });
+    </script>
+</body>
+</html>
